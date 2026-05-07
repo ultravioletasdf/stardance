@@ -85,9 +85,6 @@ application.register("markdown-preview", MarkdownPreviewController);
 import ModalController from "./modal_controller";
 application.register("modal", ModalController);
 
-import MusicPlayerController from "./music_player_controller";
-application.register("music-player", MusicPlayerController);
-
 import NavHistoryController from "./nav_history_controller";
 application.register("nav-history", NavHistoryController);
 
