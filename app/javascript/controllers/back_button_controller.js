@@ -23,7 +23,8 @@ export default class extends Controller {
       return;
     }
 
-    const fallback = this.fallbackValue || this.element.getAttribute("href") || "/";
+    const fallback =
+      this.fallbackValue || this.element.getAttribute("href") || "/";
     this._navigate(fallback);
   }
 
