@@ -85,7 +85,8 @@ module OgImage
         max_chars: 14,
         max_lines: 2,
         glow_radius: 8,
-        glow_opacity: 0.35
+        glow_opacity: 0.35,
+        font: title_font_name
       )
       @title_end_y = 130 + (lines_drawn * 82 * 1.3).to_i
     end

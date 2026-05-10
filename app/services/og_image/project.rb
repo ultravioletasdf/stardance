@@ -48,9 +48,10 @@ module OgImage
         max_chars: 18,
         max_lines: 3,
         glow_radius: 6,
-        glow_opacity: 0.3
+        glow_opacity: 0.3,
+        font: title_font_name
       )
-      @title_end_y = 170 + (lines_drawn * 54 * 1.25).to_i
+      @title_end_y = 170 + (lines_drawn * 72 * 1.3).to_i
     end
 
     def draw_subtitle

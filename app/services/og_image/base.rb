@@ -109,9 +109,10 @@ module OgImage
       @image = canvas
     end
 
-    def draw_text(text, x:, y:, size: 48, color: "#ffffff", gravity: "NorthWest")
+    def draw_text(text, x:, y:, size: 48, color: "#ffffff", gravity: "NorthWest", font: nil)
       r, g, b = hex_to_rgb(color)
-      text_img = Vips::Image.text(text.to_s, font: "#{font_name} #{size}", dpi: 72)
+      face = font || font_name
+      text_img = Vips::Image.text(text.to_s, font: "#{face} #{size}", dpi: 72)
       w, h = text_img.width, text_img.height
       colored = solid_rgba(w, h, r, g, b).extract_band(0, n: 3)
       overlay = colored.bandjoin(text_img).copy(interpretation: :srgb)
@@ -120,12 +121,12 @@ module OgImage
       @image = image.composite(overlay, :over, x: [ tx ], y: [ ty ])
     end
 
-    def draw_multiline_text(text, x:, y:, size: 48, color: "#ffffff", line_height: 1, max_chars: 35, max_lines: 3)
+    def draw_multiline_text(text, x:, y:, size: 48, color: "#ffffff", line_height: 1, max_chars: 35, max_lines: 3, font: nil)
       lines = wrap_text(text, max_chars).take(max_lines)
       spacing = (size * line_height).to_i
 
       lines.each_with_index do |line, index|
-        draw_text(line, x: x, y: y + (index * spacing), size: size, color: color)
+        draw_text(line, x: x, y: y + (index * spacing), size: size, color: color, font: font)
       end
 
       lines.size
@@ -186,11 +187,32 @@ module OgImage
       @image = canvas
     end
 
-    def draw_glowing_text(text, x:, y:, size: 48, color: "#ffffff", glow_color: nil, gravity: "NorthWest", glow_radius: 8, glow_opacity: 0.5)
+    def draw_soft_shadow(text, x:, y:, size: 48, gravity: "NorthWest", font: nil, radius: 6, opacity: 0.6, offset: 2)
+      face = font || font_name
+      text_img = Vips::Image.text(text.to_s, font: "#{face} #{size}", dpi: 72)
+      w, h = text_img.width, text_img.height
+
+      pad = radius * 3
+      padded_w = w + pad * 2
+      padded_h = h + pad * 2
+      shadow_base = Vips::Image.black(padded_w, padded_h).cast(:uchar)
+      shadow_base = shadow_base.composite(text_img, :over, x: [ pad + offset ], y: [ pad + offset ]).extract_band(0)
+      shadow_mask = shadow_base.gaussblur(radius)
+      shadow_mask = (shadow_mask * opacity).cast(:uchar)
+
+      shadow_layer = Vips::Image.black(padded_w, padded_h).new_from_image([ 0, 0, 0 ]).cast(:uchar)
+      shadow_layer = shadow_layer.bandjoin(shadow_mask).copy(interpretation: :srgb)
+
+      tx, ty = apply_gravity(gravity, x - pad, y - pad, padded_w, padded_h)
+      @image = image.composite(shadow_layer, :over, x: [ tx ], y: [ ty ])
+    end
+
+    def draw_glowing_text(text, x:, y:, size: 48, color: "#ffffff", glow_color: nil, gravity: "NorthWest", glow_radius: 8, glow_opacity: 0.5, font: nil)
       glow_color ||= color
       gr, gg, gb = hex_to_rgb(glow_color)
+      face = font || font_name
 
-      text_img = Vips::Image.text(text.to_s, font: "#{font_name} #{size}", dpi: 72)
+      text_img = Vips::Image.text(text.to_s, font: "#{face} #{size}", dpi: 72)
       w, h = text_img.width, text_img.height
 
       pad = glow_radius * 3
@@ -207,15 +229,15 @@ module OgImage
       tx, ty = apply_gravity(gravity, x - pad, y - pad, padded_w, padded_h)
       @image = image.composite(glow_layer, :over, x: [ tx ], y: [ ty ])
 
-      draw_text(text, x: x, y: y, size: size, color: color, gravity: gravity)
+      draw_text(text, x: x, y: y, size: size, color: color, gravity: gravity, font: font)
     end
 
-    def draw_glowing_multiline_text(text, x:, y:, size: 48, color: "#ffffff", glow_color: nil, line_height: 1.3, max_chars: 35, max_lines: 3, glow_radius: 8, glow_opacity: 0.5)
+    def draw_glowing_multiline_text(text, x:, y:, size: 48, color: "#ffffff", glow_color: nil, line_height: 1.3, max_chars: 35, max_lines: 3, glow_radius: 8, glow_opacity: 0.5, font: nil)
       lines = wrap_text(text, max_chars).take(max_lines)
       spacing = (size * line_height).to_i
 
       lines.each_with_index do |line, index|
-        draw_glowing_text(line, x: x, y: y + (index * spacing), size: size, color: color, glow_color: glow_color, glow_radius: glow_radius, glow_opacity: glow_opacity)
+        draw_glowing_text(line, x: x, y: y + (index * spacing), size: size, color: color, glow_color: glow_color, glow_radius: glow_radius, glow_opacity: glow_opacity, font: font)
       end
 
       lines.size
@@ -228,6 +250,10 @@ module OgImage
       rescue StandardError
         "Roboto"
       end
+    end
+
+    def title_font_name
+      "Didot Italic"
     end
 
     private

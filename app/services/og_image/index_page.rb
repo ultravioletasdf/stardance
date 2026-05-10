@@ -1,8 +1,6 @@
 module OgImage
   class IndexPage < Base
     LOGO_PATH = Rails.root.join("app", "assets", "images", "landing", "header", "stardance-logo.png").to_s
-    STAR_CHARACTER_PATH = Rails.root.join("app", "assets", "images", "landing", "hero", "star-character.png").to_s
-    EARTH_PATH = Rails.root.join("app", "assets", "images", "landing", "hero", "earth.png").to_s
     STREAK_PATH = Rails.root.join("app", "assets", "images", "landing", "how-this-works", "colorful-streak.png").to_s
 
     def initialize(title: nil, subtitle: nil)
@@ -14,9 +12,7 @@ module OgImage
     def render
       create_stardance_canvas
       place_streak
-      place_earth
       place_logo
-      place_star_character
       draw_title if @title.present?
       draw_subtitle if @subtitle.present?
     end
@@ -35,38 +31,14 @@ module OgImage
       )
     end
 
-    def place_earth
-      return unless File.exist?(EARTH_PATH)
-
-      place_image(
-        EARTH_PATH,
-        x: -40, y: -60,
-        width: 260, height: 260,
-        gravity: "SouthWest",
-        cover: false
-      )
-    end
-
     def place_logo
       return unless File.exist?(LOGO_PATH)
 
       place_image(
         LOGO_PATH,
-        x: 60, y: 50,
-        width: 360, height: 100,
+        x: 70, y: 60,
+        width: 280, height: 80,
         gravity: "NorthWest",
-        cover: false
-      )
-    end
-
-    def place_star_character
-      return unless File.exist?(STAR_CHARACTER_PATH)
-
-      place_image(
-        STAR_CHARACTER_PATH,
-        x: 60, y: 60,
-        width: 200, height: 200,
-        gravity: "NorthEast",
         cover: false
       )
     end
@@ -81,7 +53,8 @@ module OgImage
         glow_color: "#ebb7ff",
         gravity: "Center",
         glow_radius: 12,
-        glow_opacity: 0.4
+        glow_opacity: 0.4,
+        font: title_font_name
       )
     end
 
