@@ -7,19 +7,6 @@ module User::Moderation
     soft_delete_projects!
   end
 
-  def lock_voting_and_mark_votes_suspicious!(notify: false)
-    return if voting_locked?
-
-    transaction do
-      update!(voting_locked: true)
-      votes.update_all(suspicious: true)
-    end
-
-    if notify
-      dm_user("Your voting has been locked due to suspicious activity. Please contact @Fraud Squad if you believe this is a mistake.")
-    end
-  end
-
   def soft_delete_projects!
     projects.find_each do |project|
       project.soft_delete!(force: true)
