@@ -18,8 +18,7 @@ class User
       end
     end
 
-    self::ALL = [
-    ].freeze
+    self::ALL = [].freeze
 
     self::SLUGGED = self::ALL.index_by(&:slug).freeze
     self::ALL_SLUGS = self::SLUGGED.keys.freeze
