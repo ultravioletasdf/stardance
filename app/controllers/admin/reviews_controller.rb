@@ -8,5 +8,13 @@ module Admin
         .includes(:project, :user)
         .order(created_at: :asc)
     end
+
+    def show
+      authorize :admin, :access_reviews?
+
+      @review = YswsReview
+        .includes(:project, :user, :reviewer, :devlog_reviews)
+        .find(params[:id])
+    end
   end
 end

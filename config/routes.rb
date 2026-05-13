@@ -706,6 +706,7 @@ Rails.application.routes.draw do
     end
 
     get 'review', to: 'reviews#index'
+    get 'review/:id', to: 'reviews#show', as: 'review_detail'
   end
 
   get "queue", to: "queue#index"

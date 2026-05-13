@@ -1,0 +1,156 @@
+<% content_for :title, "YSWS Review ##{@review.id}" %>
+
+<div class="admin-ysws-reviews">
+  <div class="review-header">
+    <h1>Review #<%= @review.id %></h1>
+    <%= link_to "← Back to Queue", "/admin/review", class: "btn-back" %>
+  </div>
+
+  <div class="review-container">
+    <!-- Review Status Card -->
+    <div class="review-card">
+      <h2>Review Status</h2>
+      <div class="review-details">
+        <div class="detail-row">
+          <span class="detail-label">Status:</span>
+          <span class="detail-value">
+            <% if @review.reviewed_at %>
+              <span class="status-badge status-reviewed">Reviewed</span>
+            <% else %>
+              <span class="status-badge status-pending">Pending</span>
+            <% end %>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Created:</span>
+          <span class="detail-value"><%= @review.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+        </div>
+
+        <% if @review.reviewed_at %>
+          <div class="detail-row">
+            <span class="detail-label">Reviewed:</span>
+            <span class="detail-value"><%= @review.reviewed_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+          </div>
+        <% end %>
+
+        <% if @review.reviewer %>
+          <div class="detail-row">
+            <span class="detail-label">Reviewer:</span>
+            <span class="detail-value">
+              <%= link_to @review.reviewer.display_name, admin_user_path(@review.reviewer), class: "link-primary" %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Project Information Card -->
+    <div class="review-card">
+      <h2>Project Information</h2>
+      <div class="review-details">
+        <div class="detail-row">
+          <span class="detail-label">Project:</span>
+          <span class="detail-value">
+            <%= link_to @review.project.title, admin_project_path(@review.project), class: "link-primary" %>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Developer:</span>
+          <span class="detail-value">
+            <%= link_to @review.user.display_name || "Unknown", admin_user_path(@review.user), class: "link-primary" %>
+            <br><small style="opacity: 0.7;"><%= @review.user.email %></small>
+          </span>
+        </div>
+
+        <% if @review.project.project_categories.present? %>
+          <div class="detail-row">
+            <span class="detail-label">Categories:</span>
+            <span class="detail-value"><%= @review.project.project_categories.join(", ") %></span>
+          </div>
+        <% end %>
+
+        <% if @review.project.demo_url.present? %>
+          <div class="detail-row">
+            <span class="detail-label">Demo URL:</span>
+            <span class="detail-value">
+              <%= link_to @review.project.demo_url, @review.project.demo_url, target: "_blank", class: "link-external" %>
+            </span>
+          </div>
+        <% end %>
+
+        <% if @review.project.repo_url.present? %>
+          <div class="detail-row">
+            <span class="detail-label">Repo URL:</span>
+            <span class="detail-value">
+              <%= link_to @review.project.repo_url, @review.project.repo_url, target: "_blank", class: "link-external" %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Time Tracking Card -->
+    <div class="review-card">
+      <h2>Time Tracking</h2>
+      <div class="review-details">
+        <div class="detail-row">
+          <span class="detail-label">Original Minutes:</span>
+          <span class="detail-value time-value">
+            <%= @review.original_minutes || 0 %> min
+            <span class="time-hours">(<%= ((@review.original_minutes || 0) / 60.0).round(1) %> hrs)</span>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Approved Minutes:</span>
+          <span class="detail-value time-value">
+            <% if @review.approved_minutes %>
+              <%= @review.approved_minutes %> min
+              <span class="time-hours">(<%= (@review.approved_minutes / 60.0).round(1) %> hrs)</span>
+            <% else %>
+              <span style="opacity: 0.5;">Not yet approved</span>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justification Card (if exists) -->
+    <% if @review.summary_justification.present? %>
+      <div class="review-card">
+        <h2>Summary Justification</h2>
+        <div class="justification-text">
+          <%= simple_format(@review.summary_justification) %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Devlog Reviews Card -->
+    <% if @review.devlog_reviews.any? %>
+      <div class="review-card">
+        <h2>Devlog Reviews (<%= @review.devlog_reviews.count %>)</h2>
+        <div class="devlog-reviews-list">
+          <% @review.devlog_reviews.each do |devlog_review| %>
+            <div class="devlog-review-item">
+              <div class="devlog-info">
+                <strong>Devlog #<%= devlog_review.post_devlog_id %></strong>
+                <div class="devlog-times">
+                  <span>Original: <%= devlog_review.original_minutes || 0 %> min</span>
+                  <span>|</span>
+                  <span>Approved: <%= devlog_review.approved_minutes || 0 %> min</span>
+                </div>
+              </div>
+              <% if devlog_review.justification.present? %>
+                <div class="devlog-justification">
+                  <%= devlog_review.justification %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
