@@ -72,7 +72,9 @@ export default class extends Controller {
 
     this.dropdownTarget.appendChild(btn);
     tag.remove();
-    this.placeholderTarget.hidden = this.tagsTarget.querySelectorAll(".project-show__hackatime-tag").length > 0;
+    this.placeholderTarget.hidden =
+      this.tagsTarget.querySelectorAll(".project-show__hackatime-tag").length >
+      0;
   }
 
   escapeHtml(text) {

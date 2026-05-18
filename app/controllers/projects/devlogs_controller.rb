@@ -32,7 +32,7 @@ class Projects::DevlogsController < ApplicationController
             )
           end
         end
-        
+
         return redirect_to project_path(@project)
       else
         redirect_back fallback_location: home_path(project_id: @project.id),
