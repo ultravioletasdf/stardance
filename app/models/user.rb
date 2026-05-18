@@ -121,4 +121,15 @@ class User < ApplicationRecord
   include User::Social
   include User::Profile
   include User::Preferences
+
+  KERBAL_FIRST_NAMES = %w[
+    Jebediah Bill Bob Valentina Lodwig Shepard Gus Wernher Gene
+    Mortimer Linus Genekin Bobnik Billard Valentik Aldler Orlas
+    Neilbur Buzzig Mikevin Aldous Yurgus Laikus Grissom Shepnik
+    Aldorf Scottbert Rodbur Danwig Franklis Aldwig Gordox
+  ].freeze
+
+  def self.random_funny_display_name
+    "#{KERBAL_FIRST_NAMES.sample} Kerman"
+  end
 end

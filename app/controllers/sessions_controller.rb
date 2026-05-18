@@ -47,7 +47,7 @@ class SessionsController < ApplicationController
     identity.access_token = access_token
     is_new_user = user.new_record?
     user.email ||= user_email
-    user.display_name = display_name if user.display_name.to_s.strip.blank?
+    user.display_name = User.random_funny_display_name if user.display_name.to_s.strip.blank?
     user.first_name = first_name if first_name.present?
     user.last_name = last_name if last_name.present?
     user.slack_id = slack_id if user.slack_id.to_s != slack_id
