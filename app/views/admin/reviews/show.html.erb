@@ -139,123 +139,6 @@
         </div>
       </section>
 
-      <!-- Devlogs Section -->
-      <section class="review-card devlogs-card">
-        <div class="devlogs-header">
-          <h3>Devlogs (<%= @review.devlog_reviews.count %>)</h3>
-        </div>
-
-        <% if @review.devlog_reviews.any? %>
-          <div class="devlogs-list">
-            <% @review.devlog_reviews.each_with_index do |devlog_review, index| %>
-              <div class="devlog-item" <%= 'data-review-sidebar-target="trigger"'.html_safe if index == 0 %>>
-                <div class="devlog-main">
-                  <div class="devlog-header-row">
-                    <span class="devlog-id">Devlog #<%= devlog_review.post_devlog.id %></span>
-                    <% if devlog_review.approved? %>
-                      <span class="devlog-status status-approved">Approved</span>
-                    <% elsif devlog_review.rejected? %>
-                      <span class="devlog-status status-rejected">Rejected</span>
-                    <% end %>
-                  </div>
-
-                  <% if devlog_review.post_devlog.body.present? %>
-                    <p class="devlog-desc"><%= devlog_review.post_devlog.body %></p>
-                  <% else %>
-                    <p class="devlog-desc empty-body-warning">body was empty, contact @AVD, this shouldn't happen</p>
-                  <% end %>
-
-                  <div class="devlog-media-section">
-                    <div class="media-label">Devlog Media (<%= devlog_review.post_devlog.attachments.size %>)</div>
-                    <% if devlog_review.post_devlog.attachments.any? %>
-                      <div class="media-grid">
-                        <% devlog_review.post_devlog.attachments.each do |attachment| %>
-                          <% if attachment.video? %>
-                            <a href="<%= url_for(attachment) %>" target="_blank" class="media-item video-item">
-                              <video class="media-thumbnail" muted>
-                                <source src="<%= url_for(attachment) %>" type="<%= attachment.content_type %>">
-                              </video>
-                              <div class="media-type-badge">Video</div>
-                            </a>
-                          <% else %>
-                            <a href="<%= url_for(attachment) %>" target="_blank" class="media-item image-item">
-                              <%= image_tag attachment.variant(:thumb), class: "media-thumbnail", alt: "Devlog attachment" %>
-                            </a>
-                          <% end %>
-                        <% end %>
-                      </div>
-                    <% else %>
-                      <div class="media-placeholder">
-                        <div class="placeholder-text">No media attached</div>
-                      </div>
-                    <% end %>
-                  </div>
-
-                  <div class="devlog-time">
-                    Original Time:
-                    <span class="time-value"><%= devlog_review.original_minutes || 0 %> minutes</span>
-                    <em>(<%= ((devlog_review.original_minutes || 0) / 60.0).round(1) %> hrs)</em>
-                  </div>
-
-                  <div class="devlog-git-section">
-                    <div class="git-label">Git Activity</div>
-                    <div class="chart-placeholder small">
-                      <div class="placeholder-text">Placeholder for Commit Chart</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Review Decision Panel -->
-                <div class="devlog-review-panel">
-                  <div class="panel-title">Review Decision</div>
-
-                  <div class="panel-section">
-                    <div class="panel-label">Status:</div>
-                    <div class="status-buttons">
-                      <button class="status-btn btn-approve" disabled>
-                        ✓ Approve
-                      </button>
-                      <button class="status-btn btn-reject" disabled>
-                        ✗ Reject
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="panel-section">
-                    <div class="panel-label">Approved Minutes:</div>
-                    <div class="minutes-input-group">
-                      <input type="number"
-                             value="<%= devlog_review.approved_minutes || devlog_review.original_minutes || 0 %>"
-                             class="minutes-input"
-                             disabled>
-                      <span class="minutes-label">minutes</span>
-                    </div>
-                    <div class="quick-adjust-buttons">
-                      <button class="adjust-btn" disabled>50%</button>
-                      <button class="adjust-btn" disabled>25%</button>
-                      <button class="adjust-btn" disabled>-30min</button>
-                      <button class="adjust-btn" disabled>-1hr</button>
-                      <button class="adjust-btn" disabled>Reset</button>
-                    </div>
-                  </div>
-
-                  <div class="panel-section">
-                    <div class="panel-label">Internal Notes:</div>
-                    <textarea class="notes-textarea"
-                              placeholder="notes..."
-                              disabled><%= devlog_review.justification %></textarea>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="empty-devlogs">
-            <p>no devlogs found...</p>
-          </div>
-        <% end %>
-      </section>
-
       <!-- Action Buttons Section -->
       <section class="review-card actions-card">
         <div class="checklist-warning">
@@ -397,4 +280,121 @@
       </section>
     </div>
   </div>
+
+  <!-- Devlogs Section (Full Width) -->
+  <section class="review-card devlogs-card">
+    <div class="devlogs-header">
+      <h3>Devlogs (<%= @review.devlog_reviews.count %>)</h3>
+    </div>
+
+    <% if @review.devlog_reviews.any? %>
+      <div class="devlogs-list">
+        <% @review.devlog_reviews.each_with_index do |devlog_review, index| %>
+          <div class="devlog-item" <%= 'data-review-sidebar-target="trigger"'.html_safe if index == 0 %>>
+            <div class="devlog-main">
+              <div class="devlog-header-row">
+                <span class="devlog-id">Devlog #<%= devlog_review.post_devlog.id %></span>
+                <% if devlog_review.approved? %>
+                  <span class="devlog-status status-approved">Approved</span>
+                <% elsif devlog_review.rejected? %>
+                  <span class="devlog-status status-rejected">Rejected</span>
+                <% end %>
+              </div>
+
+              <% if devlog_review.post_devlog.body.present? %>
+                <p class="devlog-desc"><%= devlog_review.post_devlog.body %></p>
+              <% else %>
+                <p class="devlog-desc empty-body-warning">body was empty, contact @AVD, this shouldn't happen</p>
+              <% end %>
+
+              <div class="devlog-media-section">
+                <div class="media-label">Devlog Media (<%= devlog_review.post_devlog.attachments.size %>)</div>
+                <% if devlog_review.post_devlog.attachments.any? %>
+                  <div class="media-grid">
+                    <% devlog_review.post_devlog.attachments.each do |attachment| %>
+                      <% if attachment.video? %>
+                        <a href="<%= url_for(attachment) %>" target="_blank" class="media-item video-item">
+                          <video class="media-thumbnail" muted>
+                            <source src="<%= url_for(attachment) %>" type="<%= attachment.content_type %>">
+                          </video>
+                          <div class="media-type-badge">Video</div>
+                        </a>
+                      <% else %>
+                        <a href="<%= url_for(attachment) %>" target="_blank" class="media-item image-item">
+                          <%= image_tag attachment.variant(:thumb), class: "media-thumbnail", alt: "Devlog attachment" %>
+                        </a>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <div class="media-placeholder">
+                    <div class="placeholder-text">No media attached</div>
+                  </div>
+                <% end %>
+              </div>
+
+              <div class="devlog-time">
+                Original Time:
+                <span class="time-value"><%= devlog_review.original_minutes || 0 %> minutes</span>
+                <em>(<%= ((devlog_review.original_minutes || 0) / 60.0).round(1) %> hrs)</em>
+              </div>
+
+              <div class="devlog-git-section">
+                <div class="git-label">Git Activity</div>
+                <div class="chart-placeholder small">
+                  <div class="placeholder-text">Placeholder for Commit Chart</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Decision Panel -->
+            <div class="devlog-review-panel">
+              <div class="panel-title">Review Decision</div>
+
+              <div class="panel-section">
+                <div class="panel-label">Status:</div>
+                <div class="status-buttons">
+                  <button class="status-btn btn-approve" disabled>
+                    ✓ Approve
+                  </button>
+                  <button class="status-btn btn-reject" disabled>
+                    ✗ Reject
+                  </button>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="panel-label">Approved Minutes:</div>
+                <div class="minutes-input-group">
+                  <input type="number"
+                         value="<%= devlog_review.approved_minutes || devlog_review.original_minutes || 0 %>"
+                         class="minutes-input"
+                         disabled>
+                  <span class="minutes-label">minutes</span>
+                </div>
+                <div class="quick-adjust-buttons">
+                  <button class="adjust-btn" disabled>50%</button>
+                  <button class="adjust-btn" disabled>25%</button>
+                  <button class="adjust-btn" disabled>-30min</button>
+                  <button class="adjust-btn" disabled>-1hr</button>
+                  <button class="adjust-btn" disabled>Reset</button>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <div class="panel-label">Internal Notes:</div>
+                <textarea class="notes-textarea"
+                          placeholder="notes..."
+                          disabled><%= devlog_review.justification %></textarea>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-devlogs">
+        <p>no devlogs found...</p>
+      </div>
+    <% end %>
+  </section>
 </main>

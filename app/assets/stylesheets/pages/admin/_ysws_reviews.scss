@@ -1305,8 +1305,10 @@
     }
   }
 
-  // Devlogs Card
+  // Devlogs Card (Full Width - Outside Grid)
   .devlogs-card {
+    margin-top: var(--space-l);
+
     .devlogs-header {
       margin-bottom: var(--space-l);
 
