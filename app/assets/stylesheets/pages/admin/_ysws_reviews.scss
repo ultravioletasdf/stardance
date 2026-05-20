@@ -512,17 +512,13 @@
     }
   }
 
-  // Detail cards with cosmic gradient styling
+  // Detail cards with feed post styling - matching home page
   .review-card {
-    background: linear-gradient(
-      135deg,
-      var(--color-set-2-bg) 0%,
-      var(--color-set-3-bg) 100%
-    );
-    border: 1px solid var(--color-space-border);
+    border: 2px solid var(--color-space-border);
     border-radius: var(--profile-radius);
+    background: rgba(5, 4, 24, 0.35);
+    color: var(--color-space-text);
     padding: var(--space-l);
-    box-shadow: 0 4px 16px var(--color-shadow-deep);
 
     @media (max-width: 600px) {
       padding: var(--space-m);
@@ -535,11 +531,6 @@
       font-weight: 700;
       line-height: var(--line-height-headers);
       margin: 0 0 var(--space-m) 0;
-      text-shadow: 0 0 12px rgba(235, 183, 255, 0.2);
-
-      @media (prefers-reduced-motion: reduce) {
-        text-shadow: none;
-      }
 
       @media (max-width: 600px) {
         font-size: var(--font-size-l);
@@ -904,15 +895,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-xxs);
-    background: linear-gradient(
-      135deg,
-      var(--color-set-2-bg) 0%,
-      var(--color-set-3-bg) 100%
-    );
+    background: rgba(5, 4, 24, 0.35);
     border: 2px solid var(--color-brand-mint);
     border-radius: var(--profile-radius);
     padding: var(--space-xs);
-    box-shadow: 0 4px 12px rgba(129, 255, 255, 0.2);
 
     .platform-header {
       display: flex;
@@ -1039,6 +1025,11 @@
         max-height: calc(100vh - 4rem);
       }
 
+      // Make cards opaque in popup mode
+      .review-card {
+        background: rgb(5, 4, 24); // Opaque version of rgba(5, 4, 24, 0.35)
+      }
+
       // Scrollbar styling
       &::-webkit-scrollbar {
         width: 8px;
@@ -1090,17 +1081,12 @@
     width: var(--toggle-tab-width);
     height: 10rem;
     padding-right: 0.75rem;
-    border: none;
+    border: 2px solid var(--color-brand-blue);
+    border-right: none;
     border-radius: 2rem 0 0 2rem;
-    box-shadow:
-      -2px 3px 6px rgba(0, 0, 0, 0.16),
-      -1px 0 0 rgba(129, 255, 255, 0.24);
-    background: linear-gradient(
-      135deg,
-      var(--color-brand-blue) 0%,
-      var(--color-brand-lilac) 100%
-    );
-    color: var(--color-set-1-bg);
+    box-shadow: -2px 3px 6px rgba(0, 0, 0, 0.16);
+    background: rgba(5, 4, 24, 0.95);
+    color: var(--color-brand-blue);
     font-family: var(--font-family-sans);
     font-size: var(--font-size-l);
     font-weight: 700;
@@ -1116,9 +1102,9 @@
 
     &:hover {
       right: calc((var(--toggle-tab-width) * -1) + var(--toggle-tab-overlap) - 6px);
-      box-shadow:
-        -3px 4px 8px rgba(0, 0, 0, 0.2),
-        -2px 0 0 rgba(129, 255, 255, 0.3);
+      box-shadow: -3px 4px 8px rgba(0, 0, 0, 0.2);
+      border-color: var(--color-brand-mint);
+      color: var(--color-brand-mint);
 
       @media (prefers-reduced-motion: reduce) {
         right: calc((var(--toggle-tab-width) * -1) + var(--toggle-tab-overlap));
@@ -1152,7 +1138,7 @@
 
     .video-placeholder {
       aspect-ratio: 16 / 9;
-      background: var(--color-space-surface);
+      background: rgba(0, 0, 0, 0.3);
       border: 2px dashed var(--color-space-border);
       border-radius: var(--profile-radius);
       display: flex;
@@ -1179,8 +1165,8 @@
     }
 
     .stat-box {
-      background: var(--color-space-surface-faint);
-      border: 2px solid var(--color-brand-blue-soft);
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--color-space-border);
       border-radius: var(--profile-radius);
       padding: var(--space-m);
       text-align: center;
@@ -1189,7 +1175,6 @@
       &:hover {
         transform: translateY(-2px);
         border-color: var(--color-brand-blue);
-        box-shadow: 0 4px 12px rgba(149, 219, 255, 0.2);
       }
     }
 
@@ -1222,10 +1207,10 @@
       }
 
       .d3-chart-container {
-        background: var(--color-space-surface-faint);
+        background: rgba(0, 0, 0, 0.3);
         border-radius: var(--profile-radius);
         padding: var(--space-m);
-        border: 1px solid var(--color-space-border);
+        border: 2px solid var(--color-space-border);
 
         svg {
           display: block;
@@ -1238,13 +1223,7 @@
 
   // Boss Note Card
   .boss-note-card {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 141, 157, 0.1) 0%,
-      rgba(0, 0, 0, 0.3) 100%
-    );
-    border: 3px solid var(--color-brand-salmon);
-    box-shadow: 0 4px 20px rgba(255, 141, 157, 0.2);
+    border: 2px solid var(--color-brand-salmon);
 
     h3 {
       color: var(--color-brand-salmon);
@@ -1252,12 +1231,11 @@
       font-weight: 700;
       margin-bottom: var(--space-m);
       font-family: var(--font-family-sans);
-      text-shadow: 0 0 12px rgba(255, 141, 157, 0.4);
     }
 
     .boss-note-content {
-      background: var(--color-space-surface-faint);
-      border: 2px solid rgba(255, 141, 157, 0.3);
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--color-space-border);
       border-radius: var(--profile-radius);
       padding: var(--space-m);
 
@@ -1406,14 +1384,13 @@
         aspect-ratio: 1;
         border-radius: var(--profile-radius);
         overflow: hidden;
-        background: var(--color-space-surface-faint);
+        background: rgba(0, 0, 0, 0.3);
         border: 2px solid var(--color-space-border);
         transition: all 0.2s ease;
 
         &:hover {
           transform: translateY(-2px);
           border-color: var(--color-brand-blue);
-          box-shadow: 0 4px 12px rgba(149, 219, 255, 0.3);
         }
 
         .media-thumbnail {
@@ -1483,8 +1460,8 @@
   .devlog-review-panel {
     width: 280px;
     flex-shrink: 0;
-    background: var(--color-space-surface);
-    border: 1px solid var(--color-space-border);
+    background: rgba(5, 4, 24, 0.35);
+    border: 2px solid var(--color-space-border);
     border-radius: var(--profile-radius);
     padding: var(--space-m);
     align-self: flex-start;
@@ -1567,13 +1544,13 @@
 
     .minutes-input {
       width: 80px;
-      background: var(--color-space-surface-strong);
+      background: rgba(0, 0, 0, 0.3);
       color: var(--color-space-text);
       padding: var(--space-xs) var(--space-s);
       border-radius: var(--profile-radius);
       font-size: var(--font-size-s);
       font-family: var(--font-family-sans);
-      border: 1px solid var(--color-space-border);
+      border: 2px solid var(--color-space-border);
 
       &:focus {
         outline: none;
@@ -1624,13 +1601,13 @@
     .notes-textarea {
       width: 100%;
       min-height: 80px;
-      background: var(--color-space-surface-strong);
+      background: rgba(0, 0, 0, 0.3);
       color: var(--color-space-text);
       padding: var(--space-s);
       border-radius: var(--profile-radius);
       font-size: var(--font-size-s);
       font-family: var(--font-family-sans);
-      border: 1px solid var(--color-space-border);
+      border: 2px solid var(--color-space-border);
       resize: vertical;
 
       &:focus {
@@ -1650,47 +1627,24 @@
 
     // Visual states for approved/rejected status
     &.approved {
-      background: linear-gradient(
-        135deg,
-        rgba(129, 255, 255, 0.15) 0%,
-        rgba(129, 255, 255, 0.05) 100%
-      );
       border-color: var(--color-brand-mint);
-      box-shadow: 0 0 20px rgba(129, 255, 255, 0.2);
-
-      @media (prefers-reduced-motion: reduce) {
-        box-shadow: none;
-      }
 
       .status-btn.btn-approve.active {
         background: var(--color-brand-mint);
         color: var(--color-set-1-bg);
-        box-shadow: 0 2px 8px rgba(129, 255, 255, 0.3);
       }
     }
 
     &.rejected {
-      background: linear-gradient(
-        135deg,
-        rgba(255, 141, 157, 0.15) 0%,
-        rgba(255, 141, 157, 0.05) 100%
-      );
       border-color: var(--color-brand-salmon);
-      box-shadow: 0 0 20px rgba(255, 141, 157, 0.2);
-
-      @media (prefers-reduced-motion: reduce) {
-        box-shadow: none;
-      }
 
       .status-btn.btn-reject.active {
         background: var(--color-brand-salmon);
         color: var(--color-set-1-bg);
-        box-shadow: 0 2px 8px rgba(255, 141, 157, 0.3);
       }
     }
 
     &.pending {
-      background: var(--color-space-surface);
       border-color: var(--color-space-border);
     }
   }
@@ -1700,7 +1654,7 @@
     margin-top: calc(var(--space-l) + 10px);
 
     .checklist-warning {
-      background: rgba(255, 141, 157, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       border: 2px solid var(--color-brand-salmon);
       border-radius: var(--profile-radius);
       padding: var(--space-m);
@@ -1976,7 +1930,7 @@
     }
 
     .description-content {
-      background: var(--color-space-surface-faint);
+      background: rgba(0, 0, 0, 0.3);
       border: 2px solid var(--color-space-border);
       border-radius: var(--profile-radius);
       padding: var(--space-m);
@@ -2003,7 +1957,7 @@
 
   .chart-placeholder,
   .media-placeholder {
-    background: var(--color-space-surface-faint);
+    background: rgba(0, 0, 0, 0.3);
     border: 2px dashed var(--color-space-border);
     border-radius: var(--profile-radius);
     padding: var(--space-l);
@@ -2021,8 +1975,8 @@
   // GitHub Contribution Calendar Styles - Compact
   .contribution-calendar {
     padding: var(--space-xxs);
-    background: var(--color-space-surface-faint);
-    border: 1px solid var(--color-space-border);
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--color-space-border);
     border-radius: calc(var(--profile-radius) / 2);
     display: inline-block;
     line-height: 0; // Remove extra spacing around SVG
