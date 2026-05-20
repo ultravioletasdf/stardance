@@ -1,20 +1,81 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["dropZone", "grid", "fileInput", "info", "timeLabel"];
+  static targets = [
+    "dropZone",
+    "grid",
+    "fileInput",
+    "info",
+    "timeLabel",
+    "warn",
+    "form",
+    "textarea",
+    "submit",
+    "attachWrap",
+  ];
   static values = {
     maxFiles: { type: Number, default: 4 },
     previewTimeUrl: String,
+    hackatimeLinked: { type: Boolean, default: false },
   };
 
   #files = [];
   #urls = [];
   #timeFetched = false;
+  #composerOpen = false;
 
   connect() {
     this.#acceptedTypes = this.fileInputTarget.accept
       .split(",")
       .map((t) => t.trim());
+    this.#resizeTextarea();
+    this.#updateSubmit();
+  }
+
+  autogrow() {
+    this.#resizeTextarea();
+  }
+
+  refreshSubmit() {
+    this.#updateSubmit();
+  }
+
+  collapseIfEmpty() {
+    setTimeout(() => {
+      if (document.activeElement === this.textareaTarget) return;
+      const hasBody =
+        this.hasTextareaTarget && this.textareaTarget.value.trim().length > 0;
+      const hasFiles = this.#files.length > 0;
+      if (!hasBody && !hasFiles) {
+        this.#composerOpen = false;
+        if (this.hasInfoTarget) this.infoTarget.hidden = true;
+        this.#updateSubmit();
+      }
+    }, 150);
+  }
+
+  #updateSubmit() {
+    const hasBody =
+      this.hasTextareaTarget && this.textareaTarget.value.trim().length > 0;
+    const hasFiles = this.#files.length > 0;
+    const linked = this.hackatimeLinkedValue;
+    if (this.hasAttachWrapTarget) {
+      const show = this.#composerOpen && !hasFiles;
+      this.attachWrapTarget.classList.toggle(
+        "feed-composer__attach-wrap--expanded",
+        show,
+      );
+    }
+    if (this.hasSubmitTarget) {
+      this.submitTarget.disabled = !(hasBody && hasFiles && linked);
+    }
+  }
+
+  #resizeTextarea() {
+    if (!this.hasTextareaTarget) return;
+    const el = this.textareaTarget;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
   }
 
   disconnect() {
@@ -22,27 +83,75 @@ export default class extends Controller {
   }
 
   showInfo() {
-    if (!this.hasInfoTarget) return;
-    this.infoTarget.hidden = false;
-    if (
-      this.hasTimeLabelTarget &&
-      this.hasPreviewTimeUrlValue &&
-      !this.#timeFetched
-    ) {
-      this.#timeFetched = true;
-      fetch(this.previewTimeUrlValue, {
-        headers: { Accept: "application/json" },
-      })
-        .then((r) => r.json())
-        .then(({ preview_time }) => {
-          this.timeLabelTarget.textContent = preview_time
-            ? `${preview_time} will be logged`
-            : "Could not load coding time";
-        })
-        .catch(() => {
-          this.timeLabelTarget.textContent = "Could not load coding time";
-        });
+    this.#composerOpen = true;
+    if (this.hasInfoTarget) this.infoTarget.hidden = false;
+    this.#updateSubmit();
+    this.#fetchPreviewTime();
+  }
+
+  selectProject(event) {
+    event.preventDefault();
+    const {
+      postUrlParam,
+      previewUrlParam,
+      editUrlParam,
+      hackatimeLinkedParam,
+    } = event.params;
+    const linked =
+      hackatimeLinkedParam === true || hackatimeLinkedParam === "true";
+    const chip = event.currentTarget;
+
+    chip.parentElement
+      .querySelectorAll(".feed-composer__chip--active")
+      .forEach((el) => {
+        el.classList.remove("feed-composer__chip--active");
+        el.removeAttribute("aria-current");
+      });
+    chip.classList.add("feed-composer__chip--active");
+    chip.setAttribute("aria-current", "true");
+
+    if (this.hasFormTarget) this.formTarget.action = postUrlParam;
+    this.previewTimeUrlValue = previewUrlParam;
+    this.hackatimeLinkedValue = linked;
+    this.#timeFetched = false;
+
+    if (this.hasTimeLabelTarget) {
+      this.timeLabelTarget.hidden = !linked;
+      this.timeLabelTarget.textContent = "Loading time...";
     }
+    if (this.hasWarnTarget) {
+      this.warnTarget.hidden = linked;
+      if (editUrlParam) this.warnTarget.href = editUrlParam;
+    }
+
+    if (this.hasInfoTarget && !this.infoTarget.hidden) {
+      this.#fetchPreviewTime();
+    }
+    this.#updateSubmit();
+  }
+
+  #fetchPreviewTime() {
+    if (
+      !this.hasTimeLabelTarget ||
+      this.timeLabelTarget.hidden ||
+      !this.hasPreviewTimeUrlValue ||
+      this.#timeFetched
+    ) {
+      return;
+    }
+    this.#timeFetched = true;
+    fetch(this.previewTimeUrlValue, {
+      headers: { Accept: "application/json" },
+    })
+      .then((r) => r.json())
+      .then(({ preview_time }) => {
+        this.timeLabelTarget.textContent = preview_time
+          ? `${preview_time} will be logged`
+          : "Could not load coding time";
+      })
+      .catch(() => {
+        this.timeLabelTarget.textContent = "Could not load coding time";
+      });
   }
 
   selectFiles() {
@@ -51,17 +160,17 @@ export default class extends Controller {
 
   drop(event) {
     event.preventDefault();
-    this.dropZoneTarget.classList.remove("feed-composer__main--dragover");
+    this.dropZoneTarget.classList.remove("feed-composer--dragover");
     this.#addFiles(event.dataTransfer.files);
   }
 
   dragover(event) {
     event.preventDefault();
-    this.dropZoneTarget.classList.add("feed-composer__main--dragover");
+    this.dropZoneTarget.classList.add("feed-composer--dragover");
   }
 
   dragleave() {
-    this.dropZoneTarget.classList.remove("feed-composer__main--dragover");
+    this.dropZoneTarget.classList.remove("feed-composer--dragover");
   }
 
   paste(event) {
@@ -97,6 +206,7 @@ export default class extends Controller {
       this.gridTarget.hidden = true;
       this.gridTarget.dataset.count = "0";
       this.#syncInput();
+      this.#updateSubmit();
       return;
     }
 
@@ -145,6 +255,7 @@ export default class extends Controller {
     });
 
     this.#syncInput();
+    this.#updateSubmit();
   }
 
   #syncInput() {

@@ -14,7 +14,15 @@ module Posts
     end
 
     def enabled?
-      selected_project.present?
+      selected_project.present? && !setup_pending?
+    end
+
+    # Guest user who has already started the first-project setup flow but
+    # hasn't finished linking HCA. Their draft project exists but should be
+    # gated behind link completion — surface a "finish setup" prompt instead
+    # of the regular composer or empty-state banner.
+    def setup_pending?
+      current_user&.has_pending_setup_project?
     end
 
     def hackatime_linked?
@@ -23,10 +31,6 @@ module Posts
 
     def preview_time_url
       helpers.preview_time_project_devlogs_path(selected_project)
-    end
-
-    def visible_projects
-      projects.first(3)
     end
   end
 end
