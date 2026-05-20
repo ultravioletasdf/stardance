@@ -1170,12 +1170,6 @@
       border-radius: var(--profile-radius);
       padding: var(--space-m);
       text-align: center;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        border-color: var(--color-brand-blue);
-      }
     }
 
     .stat-label {
