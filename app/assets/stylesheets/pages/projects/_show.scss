@@ -7,9 +7,14 @@
 .project-show__feed,
 .project-show__notice,
 .project-show__onboarding,
-.project-show__payout-votes {
+.project-show__payout-votes,
+turbo-frame#project_hero {
   width: min(100%, 922px);
   align-self: center;
+}
+
+turbo-frame#project_hero {
+  display: block;
 }
 
 // Local CSS vars previously lived here (--project-show-surface, -border,
@@ -149,11 +154,13 @@
   border: 0;
   background: transparent;
   outline: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--color-space-text-muted);
+  text-underline-offset: 6px;
 
   &:focus {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
+    text-decoration-color: var(--color-brand-highlight);
   }
 }
 
@@ -657,6 +664,12 @@
 // so this uses the dark-bg variant. Secondary base = set-2 fill with a
 // muted set-3-coloured border + white text; primary fills with the cream
 // highlight.
+// `button_to` wraps the button in a form. Make that form invisible to the
+// flex parent so the button itself remains the flex item (gets flex: 1 below).
+.project-show__action-form {
+  display: contents;
+}
+
 .project-show__action {
   flex: 1;
   display: inline-flex;
