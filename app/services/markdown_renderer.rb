@@ -55,7 +55,8 @@ class MarkdownRenderer
         extension: {
           strikethrough: true,
           underline: true,
-          table: true
+          table: true,
+          tasklist: true
         }
       }
     )
