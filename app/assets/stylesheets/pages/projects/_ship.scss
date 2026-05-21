@@ -36,6 +36,7 @@
   &__header,
   &__stepper,
   &__subtitle,
+  &__video,
   &__body {
     position: relative;
     z-index: 1;
@@ -161,6 +162,12 @@
     line-height: normal;
     text-align: center;
     color: var(--color-space-text);
+  }
+
+  &__video {
+    width: 100%;
+    max-width: var(--ship-form-width);
+    margin: 0 auto 32px;
   }
 
   &__body {

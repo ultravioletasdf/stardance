@@ -59,6 +59,10 @@
     <% end %>
   </p>
 
+  <div class="ship__video">
+    <%= render VimeoEmbedComponent.new(video: :what_is_a_ship) %>
+  </div>
+
   <div class="ship__body ship__body--step-<%= @step %>">
     <% case @step %>
     <% when 1 %>
