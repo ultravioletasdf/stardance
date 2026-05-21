@@ -128,10 +128,13 @@
               <div class="project-show__field project-show__field--inline">
                 <span>Hackatime projects</span>
                 <% if !@hackatime_linked %>
-                  <a href="#" class="project-show__hackatime-connect"
-                     onclick="var f=document.createElement('form');f.method='post';f.action='/auth/hackatime';f.innerHTML='<input type=hidden name=authenticity_token value=&quot;'+document.querySelector('meta[name=csrf-token]').content+'&quot;>';document.body.append(f);f.submit();return false;">
+                  <%= button_to "/auth/hackatime",
+                                method: :post,
+                                params: { origin: request.fullpath },
+                                class: "project-show__hackatime-connect",
+                                form: { class: "project-show__hackatime-connect-form" } do %>
                     Connect Hackatime to link projects →
-                  </a>
+                  <% end %>
                 <% elsif @hackatime_dropdown_items.blank? %>
                   <span class="project-show__hackatime-empty">
                     No Hackatime projects yet — start coding with Hackatime installed to see them here.
@@ -361,6 +364,7 @@
         <nav class="project-show__actions project-show__actions--single" aria-label="Project actions">
           <%= button_to "/auth/hackatime",
                         method: :post,
+                        params: { origin: request.fullpath },
                         class: "project-show__action project-show__action--primary project-show__action--full",
                         form: { class: "project-show__action-form" } do %>
             Link Hackatime to track your project time<%= image_tag "icons/right-arrow.svg", alt: "", class: "project-show__action-icon project-show__action-icon--img" %>
