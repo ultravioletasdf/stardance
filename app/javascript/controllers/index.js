@@ -79,6 +79,12 @@ application.register("markdown-preview", MarkdownPreviewController);
 import ModalController from "./modal_controller";
 application.register("modal", ModalController);
 
+import OnboardingExperienceSliderController from "./onboarding_experience_slider_controller";
+application.register(
+  "onboarding-experience-slider",
+  OnboardingExperienceSliderController,
+);
+
 import OnboardingInterestsController from "./onboarding_interests_controller";
 application.register("onboarding-interests", OnboardingInterestsController);
 

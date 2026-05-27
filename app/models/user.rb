@@ -122,7 +122,15 @@ class User < ApplicationRecord
     experienced: "experienced"
   }, prefix: :experience
 
-  ALLOWED_INTERESTS = %w[web_dev hardware app_dev game_dev].freeze
+  ALLOWED_INTERESTS = %w[web_dev hardware app_dev game_dev ai_ml art_design].freeze
+  INTEREST_LABELS = {
+    "web_dev" => "Websites",
+    "game_dev" => "Video games",
+    "app_dev" => "Desktop applications",
+    "hardware" => "Hardware/<wbr>electronics".html_safe,
+    "ai_ml" => "AI/<wbr>machine learning".html_safe,
+    "art_design" => "Art & design"
+  }.freeze
   INTERESTS_UNKNOWN = "dont_know".freeze
 
   validate :interests_must_be_allowed
