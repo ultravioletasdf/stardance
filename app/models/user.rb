@@ -169,11 +169,6 @@ class User < ApplicationRecord
     "#{KERBAL_FIRST_NAMES.sample} Kerman"
   end
 
-  # The user's most recently attached, still-active project for a given mission.
-  # Used by the mission guide page to look up section-completion state and to
-  # decide whether to render the localStorage fallback hint. Returns nil for
-  # signed-out users (call site short-circuits on nil receiver) or users who
-  # haven't attached any project to the mission.
   def active_project_for_mission(mission)
     return nil if mission.nil?
     projects
