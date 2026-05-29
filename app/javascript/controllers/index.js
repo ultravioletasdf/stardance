@@ -25,6 +25,9 @@ application.register(
   Certification__Ysws__DevlogTimeChartController,
 );
 
+import Certification__QueueController from "./certification/queue_controller";
+application.register("certification--queue", Certification__QueueController);
+
 import Certification__Ysws__FraudReportController from "./certification/ysws/fraud_report_controller";
 application.register(
   "certification--ysws--fraud-report",
