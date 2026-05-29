@@ -51,7 +51,9 @@ export default class extends Controller {
       mask =
         "linear-gradient(to right, transparent 0%, black 56px, black calc(100% - 56px), transparent 100%)";
     }
-    el.style.maskImage = mask;
-    el.style.webkitMaskImage = mask;
+    // Apply mask to the wrapper (this.element) so it doesn't clip
+    // stars/badges that overflow the card bounds.
+    this.element.style.maskImage = mask;
+    this.element.style.webkitMaskImage = mask;
   }
 }

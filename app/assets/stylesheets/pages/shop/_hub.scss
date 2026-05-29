@@ -296,25 +296,11 @@
     }
   }
 
+  // Fade lives on the wrapper so it doesn't clip stars/badges that overflow
+  // the card bounds. The JS controller updates the mask dynamically.
   &__items-scroll {
     overflow: visible;
     position: relative;
-  }
-
-  &__items-grid {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-    margin: 0;
-    overflow-x: auto;
-    padding: 0 0 0.5rem;
-    scroll-behavior: smooth;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
-
-    scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
-
     -webkit-mask-image: linear-gradient(
       to right,
       black calc(100% - 56px),
@@ -325,6 +311,22 @@
       black calc(100% - 56px),
       transparent 100%
     );
+  }
+
+  &__items-grid {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 14px 14px 0.5rem 0;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
 
   &__scroll-arrow {
