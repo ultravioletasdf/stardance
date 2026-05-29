@@ -141,7 +141,11 @@ class ProjectsController < ApplicationController
   def add_test_time
     authorize @project
 
-    hackatime_project = current_user.hackatime_projects.find_or_initialize_by(name: test_time_hackatime_project_name)
+    # NB: query the table directly rather than current_user.hackatime_projects —
+    # that reader is overridden (User::HackatimeSync) to only surface real synced
+    # projects, so it would never find the test-time row and a second click would
+    # try to insert a duplicate, tripping the (user_id, name) uniqueness check.
+    hackatime_project = User::HackatimeProject.find_or_initialize_by(user: current_user, name: test_time_hackatime_project_name)
     hackatime_project.project = @project
     hackatime_project.save!
 
