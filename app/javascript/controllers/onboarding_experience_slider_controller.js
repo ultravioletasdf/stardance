@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 const LEVELS = [
   {
     value: "none",
-    title: "Total beginner",
+    title: "I'm new",
     description:
       "You've never really coded or built anything — and that's awesome! We'll start from the basics.",
   },
