@@ -262,9 +262,9 @@ class ApplicationController < ActionController::Base
     current_user.reload
 
     if current_user.identity_verified?
-      redirect_to user_path(current_user), notice: "You're verified — your work is now public!" and return
+      redirect_to profile_path(current_user.display_name), notice: "You're verified — your work is now public!" and return
     else
-      redirect_to user_path(current_user, idv_check: 1) and return
+      redirect_to profile_path(current_user.display_name, idv_check: 1) and return
     end
   rescue StandardError => e
     Rails.logger.warn("Portal return identity refresh failed: #{e.class}: #{e.message}")

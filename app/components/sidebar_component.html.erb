@@ -71,7 +71,7 @@
     <div class="sidebar__user-card">
       <div class="sidebar__user-meta">
         <span class="sidebar__user-meta-label">logged in as</span>
-        <%= link_to user_path(user), class: "sidebar__user-meta-handle", data: { turbo: true } do %>
+        <%= link_to profile_path(user.display_name), class: "sidebar__user-meta-handle", data: { turbo: true } do %>
           @<%= user.display_name %>
         <% end %>
       </div>

@@ -140,14 +140,14 @@
           <%= button_tag type: "button",
                          class: "profile__follow-count",
                          data: { action: "click->profile-modal#open",
-                                 "profile-modal-url-param": following_user_path(@user),
+                                "profile-modal-url-param": profile_following_path(@user.display_name),
                                  "profile-modal-title-param": "Following" } do %>
             <strong><%= @following_count %></strong> following
           <% end %>
           <%= button_tag type: "button",
                          class: "profile__follow-count",
                          data: { action: "click->profile-modal#open",
-                                 "profile-modal-url-param": followers_user_path(@user),
+                                "profile-modal-url-param": profile_followers_path(@user.display_name),
                                  "profile-modal-title-param": "Followers" } do %>
             <strong><%= @follower_count %></strong> followers
           <% end %>
@@ -192,8 +192,8 @@
 <%= turbo_frame_tag "profile_tabs", target: "_top" do %>
 <nav class="profile-tabs" role="tablist" aria-label="Profile sections">
   <% [
-    [ "feed",     "Feed",                         user_path(@user) ],
-    [ "projects", "Projects (#{@stats[:projects_count]})", projects_user_path(@user) ]
+    [ "feed",     "Feed",                         profile_path(@user.display_name) ],
+    [ "projects", "Projects (#{@stats[:projects_count]})", profile_projects_path(@user.display_name) ]
   ].each do |key, label, path| %>
     <% tab_active = (@active_tab == key) %>
     <%= link_to label,

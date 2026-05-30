@@ -304,7 +304,7 @@ class ProjectsController < ApplicationController
 
       @project.soft_delete!(force: force)
       flash[:notice] = "Project deleted successfully"
-      redirect_to projects_user_path(current_user)
+      redirect_to profile_projects_path(current_user.display_name)
     rescue ActiveRecord::RecordInvalid => e
       flash[:alert] = e.record.errors.full_messages.to_sentence
       redirect_to project_path(@project)
