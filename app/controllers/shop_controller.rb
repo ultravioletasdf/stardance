@@ -310,6 +310,8 @@ class ShopController < ApplicationController
     if @shop_mode == :tutorial
       @tutorial_items = load_tutorial_items
       current_user&.mark_shop_tutorial_started!
+    elsif @shop_mode == :preview
+      @preview_tutorial_items = load_tutorial_items
     end
 
     @categories = Shop::Categorization.all
@@ -362,6 +364,8 @@ class ShopController < ApplicationController
   def derive_shop_mode
     return :preview if current_user.nil? || current_user.guest?
     return :preview unless current_user.projects.exists?
+    return :preview unless current_user.hackatime_identity.present?
+    return :preview unless current_user.identity_verified?
     return :tutorial if current_user.shop_tutorial_needed?
 
     :normal
