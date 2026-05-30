@@ -10,13 +10,14 @@
 #                               confirm_rsvp GET    /rsvps/confirm/:token(.:format)                                                                   rsvps#confirm
 #                                    tic_tac GET    /tic_tac(.:format)                                                                                rsvps#tic_tac {format: :text}
 #                                       shop GET    /shop(.:format)                                                                                   shop/items#index
-#                                 shop_item GET    /shop/items/:id(.:format)                                                                         shop/items#show
-#                               shop_orders GET    /shop/orders(.:format)                                                                            shop/orders#index
+#                                  shop_item GET    /shop/items/:id(.:format)                                                                         shop/items#show
+#                          cancel_shop_order DELETE /shop/orders/:id/cancel(.:format)                                                                 shop/orders#cancel
+#                                shop_orders GET    /shop/orders(.:format)                                                                            shop/orders#index
 #                                            POST   /shop/orders(.:format)                                                                            shop/orders#create
-#                        cancel_shop_order DELETE   /shop/orders/:id/cancel(.:format)                                                                 shop/orders#cancel
-#                               shop_region PATCH   /shop/region(.:format)                                                                            shop/regions#update
+#                                shop_region PATCH  /shop/region(.:format)                                                                            shop/regions#update
+#                                            PUT    /shop/region(.:format)                                                                            shop/regions#update
 #                              shop_category GET    /shop/category/:slug(.:format)                                                                    shop/items#category
-#                          shop_suggestions POST    /shop/suggestions(.:format)                                                                       shop/suggestions#create
+#                           shop_suggestions POST   /shop/suggestions(.:format)                                                                       shop/suggestions#create
 #                        review_report_token GET    /report-reviews/review/:token(.:format)                                                           report_reviews#review
 #                       dismiss_report_token GET    /report-reviews/dismiss/:token(.:format)                                                          report_reviews#dismiss
 #                                   new_rate GET    /rate/new(.:format)                                                                               votes#new
@@ -65,6 +66,9 @@
 #                onboarding_interests_result GET    /onboarding/interests_result(.:format)                                                            onboarding/wizard#interests_result
 #                            onboarding_name GET    /onboarding/name(.:format)                                                                        onboarding/wizard#name
 #                                            POST   /onboarding/name(.:format)                                                                        onboarding/wizard#submit_name
+#                     onboarding_guest_email GET    /onboarding/guest_email(.:format)                                                                 onboarding/wizard#guest_email
+#                 onboarding_guest_email_yes POST   /onboarding/guest_email_yes(.:format)                                                             onboarding/wizard#guest_email_yes
+#                  onboarding_guest_email_no POST   /onboarding/guest_email_no(.:format)                                                              onboarding/wizard#guest_email_no
 #                                 admin_root GET    /admin(.:format)                                                                                  admin/application#index
 #                               admin_blazer        /admin/blazer                                                                                     Blazer::Engine
 #                                                   /admin/flipper                                                                                    Flipper::UI
@@ -208,8 +212,6 @@
 #                                            DELETE /projects/:project_id/devlogs/:id(.:format)                                                       projects/devlogs#destroy
 #                            project_reports POST   /projects/:project_id/reports(.:format)                                                           projects/reports#create
 #                           project_og_image GET    /projects/:project_id/og_image(.:format)                                                          projects/og_images#show {format: :png}
-#                      compose_project_ships GET    /projects/:project_id/ships/compose(.:format)                                                     projects/ships#compose
-#                          new_project_ships GET    /projects/:project_id/ships/new(.:format)                                                         projects/ships#new
 #                              project_ships POST   /projects/:project_id/ships(.:format)                                                             projects/ships#create
 #                            project_mission DELETE /projects/:project_id/mission(.:format)                                                           projects/missions#destroy
 #                                            POST   /projects/:project_id/mission(.:format)                                                           projects/missions#create
@@ -227,6 +229,8 @@
 #                                            PATCH  /projects/:id(.:format)                                                                           projects#update
 #                                            PUT    /projects/:id(.:format)                                                                           projects#update
 #                                            DELETE /projects/:id(.:format)                                                                           projects#destroy
+#                                post_repost DELETE /posts/:post_id/repost(.:format)                                                                  posts/reposts#destroy
+#                                            POST   /posts/:post_id/repost(.:format)                                                                  posts/reposts#create
 #                                devlog_like DELETE /devlogs/:devlog_id/like(.:format)                                                                likes#destroy
 #                                            POST   /devlogs/:devlog_id/like(.:format)                                                                likes#create
 #                            devlog_comments POST   /devlogs/:devlog_id/comments(.:format)                                                            comments#create
