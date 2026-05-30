@@ -26,14 +26,7 @@
         <div class="onboarding-interests-result__featured" aria-label="Featured projects">
           <% @featured_projects.each do |project| %>
             <a href="<%= project.url %>" target="_blank" rel="noopener noreferrer" class="onboarding-interests-result__featured-card">
-              <% if project.thumbnail_url %>
-                <% thumb_src = project.thumbnail_url.start_with?("http") ? project.thumbnail_url : image_path(project.thumbnail_url) %>
-                <img src="<%= thumb_src %>" alt="<%= project.title %>" class="onboarding-interests-result__featured-img" loading="lazy">
-              <% else %>
-                <div class="onboarding-interests-result__featured-placeholder">
-                  <span><%= project.title %></span>
-                </div>
-              <% end %>
+              <%= image_tag project.thumbnail_url, alt: project.title, class: "onboarding-interests-result__featured-img", loading: "lazy" %>
               <div class="onboarding-interests-result__featured-info">
                 <strong class="onboarding-interests-result__featured-title"><%= project.title %></strong>
                 <span class="onboarding-interests-result__featured-meta"><%= project.age %>yo from <%= project.location %></span>

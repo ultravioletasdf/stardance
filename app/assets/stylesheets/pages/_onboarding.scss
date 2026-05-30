@@ -842,40 +842,35 @@ $slider-star: url("onboarding/star-radio-active.svg");
 // Interests-result
 .onboarding-interests-result {
   &__featured {
-    display: grid;
+    display: flex;
     gap: 0.75rem;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    margin: 2rem 0;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
 
-    @media (max-width: 768px) {
-      grid-auto-flow: column;
-      grid-template-columns: none;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-    }
+    // Hide scrollbar but keep functionality
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
 
   &__featured-card {
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     color: inherit;
-    display: flex;
-    flex-direction: column;
-    min-width: 180px;
+    flex: 0 0 160px;
     overflow: hidden;
     scroll-snap-align: start;
     text-decoration: none;
-    transition: border-color 0.2s, transform 0.2s;
 
-    &:hover {
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
+    &:hover .onboarding-interests-result__featured-img {
+      opacity: 0.85;
     }
   }
 
   &__featured-img {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 3 / 2;
+    border-radius: 0.4rem;
     display: block;
     object-fit: cover;
     width: 100%;
@@ -883,37 +878,37 @@ $slider-star: url("onboarding/star-radio-active.svg");
 
   &__featured-placeholder {
     align-items: center;
-    aspect-ratio: 16 / 10;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.12));
+    aspect-ratio: 3 / 2;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 0.4rem;
     display: flex;
     justify-content: center;
-    padding: 1rem;
 
     span {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      opacity: 0.6;
-      text-align: center;
+      opacity: 0.4;
     }
   }
 
   &__featured-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0.5rem 0.6rem;
+    padding: 0.35rem 0.1rem;
   }
 
   &__featured-title {
-    font-size: 0.8rem;
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__featured-meta {
-    font-size: 0.7rem;
-    opacity: 0.6;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 500;
   }
 
   &__prize-label {
