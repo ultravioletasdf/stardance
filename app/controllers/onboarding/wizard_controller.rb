@@ -67,6 +67,7 @@ class Onboarding::WizardController < ApplicationController
 
     user = create_guest!(normalized)
     session[:user_id] = user.id
+    UserMailer.onboarding_start(user).deliver_later
     redirect_to onboarding_welcome_path
   end
 
