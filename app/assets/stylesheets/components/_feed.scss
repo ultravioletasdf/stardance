@@ -455,10 +455,57 @@
   --feed-avatar-size: 39px;
   --feed-content-offset: 50px;
 
+  position: relative;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+
+  &--linked {
+    cursor: pointer;
+
+    &:hover,
+    &:focus-within {
+      border-color: var(--color-space-text-muted);
+      background: rgba(5, 4, 24, 0.48);
+    }
+  }
+
+  &__overlay-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
+  &__overlay-link:focus-visible {
+    outline: 2px solid var(--color-brand-mint);
+    outline-offset: 3px;
+  }
+
+  &__overlay-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  a:not(.feed-post-card__overlay-link),
+  button,
+  summary,
+  input,
+  textarea,
+  select,
+  video,
+  dialog {
+    position: relative;
+    z-index: 2;
+  }
 
   &__reposted-by {
     margin-left: calc(var(--feed-avatar-size) * 0.5);

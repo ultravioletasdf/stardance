@@ -1,4 +1,12 @@
 <article id="<%= dom_id(post) %>" class="<%= card_classes %>">
+  <% if card_link_url.present? %>
+    <%= link_to card_link_url,
+          class: "feed-post-card__overlay-link",
+          aria: { label: "Open comments for this post" } do %>
+      <span class="feed-post-card__overlay-text">Open comments for this post</span>
+    <% end %>
+  <% end %>
+
   <% if plain_repost? %>
     <div class="feed-post-card__reposted-by">
       <%= inline_svg_tag "icons/repost.svg", class: "feed-post-card__reposted-by-icon" %>

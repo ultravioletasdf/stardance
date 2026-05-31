@@ -40,10 +40,17 @@ module Posts
     def card_classes
       class_names(
         "feed-post-card",
+        "feed-post-card--linked": card_link_url.present?,
         "feed-post-card--compact": compact,
         "feed-post-card--quote-repost": quote_repost?,
         "feed-post-card--#{theme}": theme.present?
       )
+    end
+
+    def card_link_url
+      if interaction_post&.postable_type == "Post::Devlog" && interaction_post.project.present?
+        helpers.project_devlog_path(interaction_post.project, interaction_postable)
+      end
     end
 
     def author
@@ -95,11 +102,7 @@ module Posts
     end
 
     def comment_url
-      if interaction_post&.postable_type == "Post::Devlog" && interaction_post.project.present?
-        helpers.project_devlog_path(interaction_post.project, interaction_postable)
-      else
-        "#"
-      end
+      card_link_url || "#"
     end
 
     def comments_count_id
@@ -167,7 +170,9 @@ module Posts
     end
 
     def post_url
-      if project.present?
+      if card_link_url.present?
+        card_link_url
+      elsif project.present?
         helpers.project_path(project, anchor: helpers.dom_id(post))
       else
         "#"
