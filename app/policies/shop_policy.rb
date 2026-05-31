@@ -1,4 +1,8 @@
 class ShopPolicy < ApplicationPolicy
+  def show?
+    true
+  end
+
   def my_orders?
     signed_in_any?
   end
