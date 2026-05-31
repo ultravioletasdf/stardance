@@ -107,14 +107,6 @@
 
       <div class="settings-form__field">
         <label class="settings-form__checkbox">
-          <%= check_box_tag :send_votes_to_slack, "1", preference.send_votes_to_slack, id: "send_votes_to_slack" %>
-          <span>Send votes to Slack</span>
-        </label>
-        <small class="settings-form__hint">Share your votes in #stardance-share-votes</small>
-      </div>
-
-      <div class="settings-form__field">
-        <label class="settings-form__checkbox">
           <%= check_box_tag :leaderboard_optin, "1", preference.leaderboard_optin, id: "leaderboard_optin" %>
           <span>Opt in to the leaderboard</span>
         </label>
