@@ -8,6 +8,7 @@ class Home::FeedsController < ApplicationController
 
   def show
     authorize :home, :feed?
+    @feed_request_id = SecureRandom.uuid
     load_feed
     load_recommended_projects if first_page?
     render layout: false
@@ -23,29 +24,43 @@ class Home::FeedsController < ApplicationController
         (!post.repost? || post.visible_repost_original_for?(current_user))
     end
 
+    blend_recommended_posts if first_page?
     preload_feed_associations(@feed_posts)
     @liked_devlog_ids = liked_devlog_ids_for(@feed_posts)
   end
 
+  def blend_recommended_posts
+    @feed_post_sources = @feed_posts.index_with { "quality_latest" }
+    recommendations = Gorse::Recommendations.new(user: current_user)
+    recommended_posts = recommendations.posts(limit: 4)
+    recommended_posts = recommended_posts.reject { |post| @feed_post_sources.key?(post) }
+
+    recommended_posts.each_with_index do |post, index|
+      insert_at = [ 1 + (index * 4), @feed_posts.length ].min
+      @feed_posts.insert(insert_at, post)
+      @feed_post_sources[post] = "recommended"
+    end
+  end
+
   def feed_scope
-    Post.with(
-      feed_entries: [
-        Post.of_devlogs(join: true)
-            .where(post_devlogs: { deleted_at: nil })
-            .where(project_id: Project.not_deleted)
-            .select("posts.*"),
-        Post.of_ship_events(join: true)
-            .where.not(post_ship_events: { certification_status: "rejected" })
-            .where(project_id: Project.not_deleted)
-            .select("posts.*"),
-        Post.of_reposts(join: true)
-            .where(post_reposts: { deleted_at: nil })
-            .select("posts.*")
-      ]
-    )
-    .from("feed_entries AS posts")
-    .visible_to(current_user)
-    .order(created_at: :desc)
+    Gorse::PostPayload.feed_scope(current_user)
+      .joins("LEFT JOIN users feed_authors ON feed_authors.id = posts.user_id")
+      .joins("LEFT JOIN projects feed_projects ON feed_projects.id = posts.project_id")
+      .where("feed_projects.id IS NULL OR feed_projects.description IS NOT NULL")
+      .order(Arel.sql(quality_latest_order_sql))
+  end
+
+  def quality_latest_order_sql
+    <<~SQL.squish
+      (
+        CASE WHEN feed_authors.verification_status = 'verified' THEN 40 ELSE 0 END
+        + CASE WHEN feed_projects.description IS NOT NULL AND feed_projects.description != '' THEN 10 ELSE 0 END
+        + CASE WHEN feed_projects.devlogs_count > 0 THEN 10 ELSE 0 END
+        + CASE WHEN feed_projects.shipped_at IS NOT NULL THEN 15 ELSE 0 END
+        + COALESCE(posts.reposts_count, 0) * 3
+      ) DESC,
+      posts.created_at DESC
+    SQL
   end
 
   def preload_feed_associations(posts)
@@ -82,10 +97,17 @@ class Home::FeedsController < ApplicationController
   end
 
   def load_recommended_projects
-    @recommended_projects = Project.excluding_member(current_user)
-                                   .where(deleted_at: nil)
-                                   .with_banner_priority
-                                   .limit(6)
+    recommendations = Gorse::Recommendations.new(user: current_user)
+    projects = recommendations.projects(limit: 6)
+
+    @recommended_projects =
+      if projects.any?
+        projects
+      else
+        Gorse::ProjectPayload.recommendable_scope(current_user)
+                             .with_banner_priority
+                             .limit(6)
+      end
   end
 
   def first_page?
