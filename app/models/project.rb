@@ -425,6 +425,13 @@ class Project < ApplicationRecord
       .all? { |r| r[:passed] }
   end
 
+  def info_blocker_message
+    req = shipping_requirements
+      .select { |r| INFO_REQUIREMENT_KEYS.include?(r[:key]) }
+      .find { |r| !r[:passed] }
+    req&.dig(:label)
+  end
+
   # The editable info fields (see FIELD_REQUIREMENT_MAP) that still have an
   # unmet requirement — used to highlight what's left to fill in on the form.
   def incomplete_info_fields

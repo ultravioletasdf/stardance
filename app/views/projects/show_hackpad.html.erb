@@ -432,7 +432,12 @@
                     text: "Complete project info",
                     variant: :primary,
                     href: project_path(@project, editing: true, complete: true),
-                    data: { turbo_frame: "project_hero" }
+                    data: {
+                      turbo_frame: "project_hero",
+                      controller: "tooltip",
+                      tooltip_message_value: @project.info_blocker_message,
+                      tooltip_position_value: "top"
+                    }
                   ) %>
             <% else %>
               <%= render ActionButtonComponent.new(
