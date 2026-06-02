@@ -50,6 +50,13 @@ module Certification
       ch - DOT_R - val.to_f / y_max * (ch - 2 * DOT_R)
     end
 
+    STYLE = <<~CSS.freeze
+      <style>
+        .commit-graph a text { cursor: pointer; }
+        .commit-graph a:hover text { text-decoration: underline; }
+      </style>
+    CSS
+
     def esc(text) = CGI.escapeHTML(text.to_s)
 
     def truncate_msg(message)
@@ -83,11 +90,12 @@ module Certification
       msg   = esc(truncate_msg(c[:message]))
       url   = c[:url]
 
-      sha_text = %(<text x="100" y="60" text-anchor="middle" fill="#{ADDS_COLOR}" font-size="12" font-family="monospace"#{url ? ' text-decoration="underline"' : ""}>#{short}</text>)
+      sha_text = %(<text x="100" y="60" text-anchor="middle" fill="#{ADDS_COLOR}" font-size="12" font-family="monospace">#{short}</text>)
       sha_el   = url ? %(<a href="#{esc(url)}" target="_blank" rel="noopener noreferrer">#{sha_text}</a>) : sha_text
 
       <<~SVG
         <svg viewBox="0 0 200 88" width="100%" style="overflow:visible" class="commit-graph">
+          #{STYLE}
           <text x="0"  y="12" fill="#{ADDS_COLOR}"  font-size="11" font-family="monospace">+#{adds}</text>
           <text x="40" y="12" fill="#{DELS_COLOR}"  font-size="11" font-family="monospace">-#{dels}</text>
           <text x="80" y="12" fill="#{MUTED_COLOR}" font-size="11" font-family="monospace">1 commit</text>
@@ -106,6 +114,7 @@ module Certification
 
       buf = []
       buf << %(<svg viewBox="0 0 #{W} #{H}" width="100%" style="overflow:visible" class="commit-graph">)
+      buf << STYLE
 
       # Meta row
       buf << %(<text x="0"  y="13" fill="#{ADDS_COLOR}"  font-size="11" font-family="monospace">+#{total_adds}</text>)
